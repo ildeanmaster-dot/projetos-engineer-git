@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+
+# Cloud credentials
+.aws/
+.azure/
+*.json
+!package.json
+!*.example.json
+gcp-key*.json
+service-account*.json
+
+# Local data / outputs
+data/
+*.csv
+*.parquet
+!docs/**/*.csv
+!**/sample/*.csv
+
+# Project configs (use *.example.yaml as template)
+config.yaml
+*.local.yaml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

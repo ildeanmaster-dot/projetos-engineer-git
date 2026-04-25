@@ -1,0 +1,9 @@
+requests>=2.32,<3
+pandas>=2.2,<3
+PyYAML>=6.0,<7
+
+# Cloud SDKs (instale apenas o do(s) target(s) que for usar)
+boto3>=1.35,<2
+azure-identity>=1.17,<2
+azure-storage-blob>=12.22,<13
+google-cloud-storage>=2.18,<3

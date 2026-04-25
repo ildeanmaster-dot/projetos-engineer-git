@@ -1,0 +1,22 @@
+# Copie este arquivo para config.yaml (não versionado) e preencha conforme sua infra.
+# config.yaml está no .gitignore — credenciais nunca devem ser commitadas.
+
+# Caminho relativo dentro do storage de cada cloud
+# Layout final: <bucket>/raw/anp/year=YYYY/month=MM/<arquivo>.csv
+storage_prefix: "raw/anp"
+
+aws:
+  bucket: "anp-fuel-prices-<sua-conta>"   # nome global, único na AWS
+  region: "us-east-1"
+  profile: "default"                       # perfil em ~/.aws/credentials
+
+azure:
+  storage_account: "anpfuelprices<sufixo>" # 3-24 chars, lowercase, único globalmente
+  container: "raw"
+  # auth via `az login` (DefaultAzureCredential)
+
+gcp:
+  bucket: "anp-fuel-prices-<seu-project>"  # único globalmente
+  project: "seu-gcp-project-id"
+  location: "US"
+  # auth via `gcloud auth application-default login`
