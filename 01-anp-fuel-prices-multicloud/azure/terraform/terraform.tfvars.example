@@ -1,6 +1,0 @@
-resource_group_name    = "rg-anp-fuel-prices"
-location               = "brazilsouth"
-storage_account_name   = "anpfuelprcSUFIXO"   # 3-24 chars, lowercase, sem hífen
-synapse_workspace_name = "anp-fuel-prices-ws-SUFIXO"
-synapse_admin_login    = "anp_admin"
-# Defina via variável de ambiente:  export TF_VAR_synapse_admin_password='SuaSenhaForte!'

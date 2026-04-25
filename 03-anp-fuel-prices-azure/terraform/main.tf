@@ -42,9 +42,20 @@ variable "synapse_admin_password" {
   sensitive = true
 }
 
+locals {
+  common_tags = {
+    project    = "anp-fuel-prices"
+    owner      = "ildean"
+    env        = "portfolio"
+    managed_by = "terraform"
+    repo       = "projetos-engineer-git"
+  }
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = var.location
+  tags     = local.common_tags
 }
 
 # ADLS Gen2 (storage account com hierarchical namespace)
@@ -56,10 +67,13 @@ resource "azurerm_storage_account" "data" {
   account_replication_type = "LRS"
   account_kind             = "StorageV2"
   is_hns_enabled           = true
+  min_tls_version          = "TLS1_2"
 
   blob_properties {
     versioning_enabled = false
   }
+
+  tags = local.common_tags
 }
 
 # Filesystem (container) onde o ingest vai gravar os CSVs
@@ -85,6 +99,8 @@ resource "azurerm_synapse_workspace" "ws" {
   identity {
     type = "SystemAssigned"
   }
+
+  tags = local.common_tags
 }
 
 # Permite que o IP que fez o terraform apply acesse o workspace via Synapse Studio

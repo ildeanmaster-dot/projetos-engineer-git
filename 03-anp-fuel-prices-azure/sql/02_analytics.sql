@@ -1,7 +1,7 @@
 -- Synapse Serverless SQL — queries analíticas sobre dbo.weekly_prices_raw.
--- T-SQL não tem REPLACE direto que aceite NULL; usamos TRY_CAST para tolerar valores ruins.
+-- T-SQL: usamos TRY_CAST/TRY_CONVERT para tolerar valores ruins.
 
--- Query 1 — preço médio do diesel por UF na partição mais recente
+-- Query 1 — preço médio da gasolina por UF na partição mais recente
 WITH base AS (
     SELECT
         estado_sigla,
@@ -17,13 +17,13 @@ latest AS (
 )
 SELECT
     base.estado_sigla,
-    ROUND(AVG(base.preco), 3) AS preco_medio_diesel,
+    ROUND(AVG(base.preco), 3) AS preco_medio_gasolina,
     COUNT(*)                  AS coletas
 FROM base
 JOIN latest ON base.year = latest.year AND base.month = latest.month
-WHERE LOWER(base.produto) LIKE 'diesel%'
+WHERE LOWER(base.produto) = 'gasolina'
 GROUP BY base.estado_sigla
-ORDER BY preco_medio_diesel DESC;
+ORDER BY preco_medio_gasolina DESC;
 
 -- Query 2 — série temporal nacional do preço médio da gasolina
 SELECT
@@ -40,7 +40,7 @@ WHERE dt IS NOT NULL
 GROUP BY DATEFROMPARTS(YEAR(dt), MONTH(dt), DAY(dt) - (DATEPART(weekday, dt) - 1))
 ORDER BY semana;
 
--- Query 3 — top 10 municípios mais caros para etanol na partição mais recente
+-- Query 3 — top 10 municípios com gasolina mais cara na partição mais recente
 WITH base AS (
     SELECT
         estado_sigla, municipio, produto, year, month,
@@ -54,11 +54,11 @@ latest AS (
 SELECT TOP 10
     base.estado_sigla,
     base.municipio,
-    ROUND(AVG(base.preco), 3) AS preco_medio_etanol,
+    ROUND(AVG(base.preco), 3) AS preco_medio_gasolina,
     COUNT(*)                  AS coletas
 FROM base
 JOIN latest ON base.year = latest.year AND base.month = latest.month
-WHERE LOWER(base.produto) = 'etanol'
+WHERE LOWER(base.produto) = 'gasolina'
 GROUP BY base.estado_sigla, base.municipio
 HAVING COUNT(*) >= 3
-ORDER BY preco_medio_etanol DESC;
+ORDER BY preco_medio_gasolina DESC;

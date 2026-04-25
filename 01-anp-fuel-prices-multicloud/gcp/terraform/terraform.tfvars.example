@@ -1,4 +1,0 @@
-project     = "seu-gcp-project-id"
-region      = "us-central1"
-location    = "US"
-bucket_name = "anp-fuel-prices-SEUPROJETO"

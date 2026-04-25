@@ -46,8 +46,8 @@ FROM OPENROWSET(
     FORMAT = 'CSV',
     PARSER_VERSION = '2.0',
     FIELDTERMINATOR = ';',
-    FIRSTROW = 2,
-    CODEPAGE = '28591'  -- ISO-8859-1 / Latin-1
+    FIRSTROW = 2
+    -- PARSER_VERSION 2.0 só suporta UTF-8 (default). Os CSVs mensais da ANP estão em UTF-8.
 ) WITH (
     regiao_sigla   VARCHAR(10),
     estado_sigla   VARCHAR(5),

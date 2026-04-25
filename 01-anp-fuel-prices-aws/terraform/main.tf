@@ -33,9 +33,20 @@ variable "glue_database" {
   default = "anp_fuel_prices"
 }
 
+locals {
+  common_tags = {
+    project   = "anp-fuel-prices"
+    owner     = "ildean"
+    env       = "portfolio"
+    managedBy = "terraform"
+    repo      = "projetos-engineer-git"
+  }
+}
+
 resource "aws_s3_bucket" "raw" {
   bucket        = var.bucket_name
   force_destroy = true
+  tags          = local.common_tags
 }
 
 resource "aws_s3_bucket_public_access_block" "raw" {
@@ -58,6 +69,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "raw" {
 resource "aws_s3_bucket" "athena_results" {
   bucket        = "${var.bucket_name}-athena-results"
   force_destroy = true
+  tags          = local.common_tags
 }
 
 resource "aws_s3_bucket_public_access_block" "athena_results" {
@@ -73,7 +85,7 @@ resource "aws_glue_catalog_database" "anp" {
 }
 
 resource "aws_athena_workgroup" "anp" {
-  name = "anp-fuel-prices"
+  name = "wg-anp-fuel-prices"
 
   configuration {
     result_configuration {
@@ -82,6 +94,7 @@ resource "aws_athena_workgroup" "anp" {
   }
 
   force_destroy = true
+  tags          = local.common_tags
 }
 
 output "raw_bucket" {

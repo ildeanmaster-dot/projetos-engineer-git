@@ -1,0 +1,15 @@
+# Boas práticas de naming Azure (CAF — Cloud Adoption Framework):
+#   - resource group: prefixo 'rg-' + propósito
+#   - storage account: prefixo 'st' + lowercase, ALFANUMERICO ONLY (sem hífen), 3-24 chars, único globalmente
+#   - synapse workspace: prefixo 'synw-' + propósito + sufixo único
+#   - location: 'brazilsouth' (mais perto do BR) ou 'eastus' (mais barato)
+#
+# AJUSTE OS NOMES SE FOR PUBLICAR DE OUTRA CONTA (storage account é único globalmente).
+# A senha do admin do Synapse vai por env var (TF_VAR_synapse_admin_password) — nunca commite senha.
+
+resource_group_name    = "rg-anp-fuel-prices"
+location               = "brazilsouth"
+storage_account_name   = "stanpfuelildean26"          # 17 chars, alfanumérico, único
+synapse_workspace_name = "synw-anp-fuel-prices-ildean"
+synapse_admin_login    = "anp_admin"
+# export TF_VAR_synapse_admin_password='SuaSenhaForte!'   <- defina antes do apply

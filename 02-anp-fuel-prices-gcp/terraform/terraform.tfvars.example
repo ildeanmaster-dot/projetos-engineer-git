@@ -1,0 +1,11 @@
+# Boas práticas de naming GCP:
+#   - bucket GCS: lowercase, hyphens permitidos, único globalmente
+#   - location US: multi-região barata, sem locked-in regional
+#   - region us-central1: padrão BigQuery, US$ 5/TB com 1 TB grátis/mês
+#
+# AJUSTE 'project' com o id do seu GCP project (ex.: 'meu-projeto-portfolio-2026')
+
+project     = "SEU-GCP-PROJECT-ID"
+region      = "us-central1"
+location    = "US"
+bucket_name = "anp-fuel-prices-ildean26"

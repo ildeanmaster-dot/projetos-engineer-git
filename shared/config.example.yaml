@@ -6,17 +6,17 @@
 storage_prefix: "raw/anp"
 
 aws:
-  bucket: "anp-fuel-prices-<sua-conta>"   # nome global, único na AWS
+  bucket: "anp-fuel-prices-ildean26"      # confira com: terraform output -raw raw_bucket
   region: "us-east-1"
   profile: "default"                       # perfil em ~/.aws/credentials
 
 azure:
-  storage_account: "anpfuelprices<sufixo>" # 3-24 chars, lowercase, único globalmente
+  storage_account: "stanpfuelildean26"    # confira com: terraform output -raw storage_account
   container: "raw"
   # auth via `az login` (DefaultAzureCredential)
 
 gcp:
-  bucket: "anp-fuel-prices-<seu-project>"  # único globalmente
-  project: "seu-gcp-project-id"
+  bucket: "anp-fuel-prices-ildean26"      # confira com: terraform output -raw raw_bucket
+  project: "SEU-GCP-PROJECT-ID"            # ajuste para seu project (gcloud config get project)
   location: "US"
   # auth via `gcloud auth application-default login`

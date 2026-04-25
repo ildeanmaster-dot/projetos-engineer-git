@@ -1,14 +1,14 @@
 -- BigQuery — queries analíticas sobre os preços da ANP.
 -- A tabela externa `anp_fuel_prices.weekly_prices_raw` foi criada via Terraform
--- com Hive partitioning (year, month) e schema fixo. Trocar `__PROJECT__` pelo
--- seu project id ou usar o dataset diretamente se já estiver no projeto correto.
+-- com Hive partitioning (year, month) e schema fixo.
+-- Substitua `__PROJECT__` pelo seu project id (ou rode com o dataset já default).
 
--- Query 1 — preço médio do diesel por UF na partição mais recente
+-- Query 1 — preço médio da gasolina por UF na partição mais recente
 WITH base AS (
     SELECT
         estado_sigla,
         produto,
-        PARSE_DATE('%d/%m/%Y', data_coleta)            AS dt_coleta,
+        PARSE_DATE('%d/%m/%Y', data_coleta)                  AS dt_coleta,
         SAFE_CAST(REPLACE(valor_venda, ',', '.') AS FLOAT64) AS preco,
         year, month
     FROM `__PROJECT__.anp_fuel_prices.weekly_prices_raw`
@@ -24,14 +24,14 @@ latest_partition AS (
 )
 SELECT
     estado_sigla,
-    ROUND(AVG(preco), 3) AS preco_medio_diesel,
+    ROUND(AVG(preco), 3) AS preco_medio_gasolina,
     COUNT(*)             AS coletas
 FROM base, latest_partition
 WHERE base.year  = latest_partition.year
   AND base.month = latest_partition.month
-  AND LOWER(produto) LIKE 'diesel%'
+  AND LOWER(produto) = 'gasolina'
 GROUP BY estado_sigla
-ORDER BY preco_medio_diesel DESC;
+ORDER BY preco_medio_gasolina DESC;
 
 -- Query 2 — série temporal nacional do preço médio da gasolina
 SELECT
@@ -42,7 +42,7 @@ WHERE LOWER(produto) = 'gasolina'
 GROUP BY semana
 ORDER BY semana;
 
--- Query 3 — top 10 municípios mais caros para etanol na partição mais recente
+-- Query 3 — top 10 municípios com gasolina mais cara na partição mais recente
 WITH base AS (
     SELECT
         estado_sigla, municipio, produto, year, month,
@@ -58,13 +58,13 @@ latest_partition AS (
 )
 SELECT
     estado_sigla, municipio,
-    ROUND(AVG(preco), 3) AS preco_medio_etanol,
+    ROUND(AVG(preco), 3) AS preco_medio_gasolina,
     COUNT(*)             AS coletas
 FROM base, latest_partition
 WHERE base.year  = latest_partition.year
   AND base.month = latest_partition.month
-  AND LOWER(produto) = 'etanol'
+  AND LOWER(produto) = 'gasolina'
 GROUP BY estado_sigla, municipio
 HAVING coletas >= 3
-ORDER BY preco_medio_etanol DESC
+ORDER BY preco_medio_gasolina DESC
 LIMIT 10;

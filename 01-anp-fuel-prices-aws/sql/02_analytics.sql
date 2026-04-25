@@ -2,7 +2,7 @@
 -- Conversão dos campos: valor_venda chega como string com ',' decimal e
 -- data_coleta como 'DD/MM/YYYY'. As CTE abaixo normalizam isso.
 
--- Query 1 — preço médio do diesel por UF na partição mais recente
+-- Query 1 — preço médio da gasolina por UF na partição mais recente
 WITH normalized AS (
     SELECT
         estado_sigla,
@@ -16,12 +16,12 @@ WITH normalized AS (
 )
 SELECT
     estado_sigla,
-    ROUND(AVG(preco), 3) AS preco_medio_diesel,
+    ROUND(AVG(preco), 3) AS preco_medio_gasolina,
     COUNT(*)             AS coletas
 FROM normalized
-WHERE LOWER(produto) LIKE 'diesel%'
+WHERE LOWER(produto) = 'gasolina'
 GROUP BY estado_sigla
-ORDER BY preco_medio_diesel DESC;
+ORDER BY preco_medio_gasolina DESC;
 
 -- Query 2 — série temporal nacional do preço médio da gasolina (todas as partições)
 WITH normalized AS (
@@ -38,7 +38,7 @@ FROM normalized
 GROUP BY 1
 ORDER BY semana;
 
--- Query 3 — top 10 municípios mais caros para etanol na partição mais recente
+-- Query 3 — top 10 municípios com gasolina mais cara na partição mais recente
 WITH normalized AS (
     SELECT
         estado_sigla,
@@ -53,11 +53,11 @@ WITH normalized AS (
 SELECT
     estado_sigla,
     municipio,
-    ROUND(AVG(preco), 3) AS preco_medio_etanol,
+    ROUND(AVG(preco), 3) AS preco_medio_gasolina,
     COUNT(*)             AS coletas
 FROM normalized
-WHERE LOWER(produto) = 'etanol'
+WHERE LOWER(produto) = 'gasolina'
 GROUP BY estado_sigla, municipio
 HAVING COUNT(*) >= 3
-ORDER BY preco_medio_etanol DESC
+ORDER BY preco_medio_gasolina DESC
 LIMIT 10;

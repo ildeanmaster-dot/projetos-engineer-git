@@ -39,18 +39,30 @@ variable "bq_dataset" {
   default = "anp_fuel_prices"
 }
 
+locals {
+  common_labels = {
+    project    = "anp-fuel-prices"
+    owner      = "ildean"
+    env        = "portfolio"
+    managed_by = "terraform"
+    repo       = "projetos-engineer-git"
+  }
+}
+
 resource "google_storage_bucket" "raw" {
   name                        = var.bucket_name
   location                    = var.location
   uniform_bucket_level_access = true
   force_destroy               = true
+  public_access_prevention    = "enforced"
 
-  public_access_prevention = "enforced"
+  labels = local.common_labels
 }
 
 resource "google_bigquery_dataset" "anp" {
   dataset_id = var.bq_dataset
   location   = var.location
+  labels     = local.common_labels
 }
 
 # Tabela externa apontando para os CSVs no GCS, particionada via Hive partitioning
@@ -69,7 +81,7 @@ resource "google_bigquery_table" "weekly_prices_raw" {
       skip_leading_rows     = 1
       field_delimiter       = ";"
       allow_quoted_newlines = true
-      encoding              = "ISO-8859-1"
+      encoding              = "UTF-8"
     }
 
     hive_partitioning_options {

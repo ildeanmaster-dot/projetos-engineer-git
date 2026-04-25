@@ -1,0 +1,10 @@
+# Boas práticas de naming AWS:
+#   - bucket S3: lowercase, hyphens, único globalmente, indica owner+propósito
+#   - region: us-east-1 tem todos os serviços e o menor preço (US$ 5/TB Athena)
+#   - profile: nome do perfil em ~/.aws/credentials (não a access key em si)
+#
+# AJUSTE O SUFIXO 'ildean26' SE FOR PUBLICAR DE OUTRA CONTA — bucket name é único globalmente.
+
+region      = "us-east-1"
+profile     = "default"
+bucket_name = "anp-fuel-prices-ildean26"
